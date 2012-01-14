@@ -1,0 +1,13 @@
+mvalue
+by Marc Lepage
+
+
+OVERVIEW
+
+This C++ code attempts to create a class similar to an STL container like vector or valarray, but with the ability to dynamically change its element type via the Usual Arithmetic Conversions.
+
+Because it uses proxy iterators, it can never be a truly conforming STL container (vector<bool> also suffers this fate). However, it's close enough that many STL algorithms work.
+
+It uses some template magic to make the UACs work.
+
+Originally written in April 2007, it remains a work in progress.

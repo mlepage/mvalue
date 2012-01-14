@@ -1,0 +1,222 @@
+
+// Comparison operators, maybe faster, need more work and testing
+#if 0
+    bool operator ==(const mvalue& rhs) const
+    {
+        size_type sz = size();
+        if (rhs.size() != sz) return false;
+        switch (uac_type(*this, rhs))
+        {
+            case int_type:          for (size_type n = 0; n != sz; ++n) if (get_int(n) != rhs.get_int(n)) return false; break;
+            case uint_type:         for (size_type n = 0; n != sz; ++n) if (get_uint(n) != rhs.get_uint(n)) return false; break;
+            case long_type:         for (size_type n = 0; n != sz; ++n) if (get_long(n) != rhs.get_long(n)) return false; break;
+            case ulong_type:        for (size_type n = 0; n != sz; ++n) if (get_ulong(n) != rhs.get_ulong(n)) return false; break;
+            case longlong_type:     for (size_type n = 0; n != sz; ++n) if (get_longlong(n) != rhs.get_longlong(n)) return false; break;
+            case ulonglong_type:    for (size_type n = 0; n != sz; ++n) if (get_ulonglong(n) != rhs.get_ulonglong(n)) return false; break;
+            case float_type:        for (size_type n = 0; n != sz; ++n) if (get_float(n) != rhs.get_float(n)) return false; break;
+            case double_type:       for (size_type n = 0; n != sz; ++n) if (get_double(n) != rhs.get_double(n)) return false; break;
+            case ldouble_type:      for (size_type n = 0; n != sz; ++n) if (get_ldouble(n) != rhs.get_ldouble(n)) return false; break;
+            default:                assert(false);
+        }
+        return true;
+    }
+    bool operator !=(const mvalue& rhs) const
+    {
+        size_type sz = size();
+        if (rhs.size() != sz) return true;
+        switch (uac_type(*this, rhs))
+        {
+            case int_type:          for (size_type n = 0; n != sz; ++n) if (get_int(n) != rhs.get_int(n)) return true; break;
+            case uint_type:         for (size_type n = 0; n != sz; ++n) if (get_uint(n) != rhs.get_uint(n)) return true; break;
+            case long_type:         for (size_type n = 0; n != sz; ++n) if (get_long(n) != rhs.get_long(n)) return true; break;
+            case ulong_type:        for (size_type n = 0; n != sz; ++n) if (get_ulong(n) != rhs.get_ulong(n)) return true; break;
+            case longlong_type:     for (size_type n = 0; n != sz; ++n) if (get_longlong(n) != rhs.get_longlong(n)) return true; break;
+            case ulonglong_type:    for (size_type n = 0; n != sz; ++n) if (get_ulonglong(n) != rhs.get_ulonglong(n)) return true; break;
+            case float_type:        for (size_type n = 0; n != sz; ++n) if (get_float(n) != rhs.get_float(n)) return true; break;
+            case double_type:       for (size_type n = 0; n != sz; ++n) if (get_double(n) != rhs.get_double(n)) return true; break;
+            case ldouble_type:      for (size_type n = 0; n != sz; ++n) if (get_ldouble(n) != rhs.get_ldouble(n)) return true; break;
+            default:                assert(false);
+        }
+        return true;
+    }
+    bool operator <(const mvalue& rhs) const
+    {
+        size_type lsz = size();
+        size_type rsz = rhs.size();
+        size_type sz = std::min(lsz, rsz);
+        switch (uac_type(*this, rhs))
+        {
+            case int_type:          for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_int(n), rhs.get_int(n)); if (cmp < 0) return true; else if (0 < cmp) return false; } break;
+            case uint_type:         for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_uint(n), rhs.get_uint(n)); if (cmp < 0) return true; else if (0 < cmp) return false; } break;
+            case long_type:         for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_long(n), rhs.get_long(n)); if (cmp < 0) return true; else if (0 < cmp) return false; } break;
+            case ulong_type:        for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_ulong(n), rhs.get_ulong(n)); if (cmp < 0) return true; else if (0 < cmp) return false; } break;
+            case longlong_type:     for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_longlong(n), rhs.get_longlong(n)); if (cmp < 0) return true; else if (0 < cmp) return false; } break;
+            case ulonglong_type:    for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_ulonglong(n), rhs.get_ulonglong(n)); if (cmp < 0) return true; else if (0 < cmp) return false; } break;
+            case float_type:        for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_float(n), rhs.get_float(n)); if (cmp < 0) return true; else if (0 < cmp) return false; } break;
+            case double_type:       for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_double(n), rhs.get_double(n)); if (cmp < 0) return true; else if (0 < cmp) return false; } break;
+            case ldouble_type:      for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_ldouble(n), rhs.get_ldouble(n)); if (cmp < 0) return true; else if (0 < cmp) return false; } break;
+            default:                assert(false);
+        }
+        return lsz < rsz;
+    }
+    bool operator <=(const mvalue& rhs) const
+    {
+        size_type lsz = size();
+        size_type rsz = rhs.size();
+        size_type sz = std::min(lsz, rsz);
+        switch (uac_type(*this, rhs))
+        {
+            case int_type:          for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_int(n), rhs.get_int(n)); if (cmp < 0) return true; else if (0 < cmp) return false; } break;
+            case uint_type:         for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_uint(n), rhs.get_uint(n)); if (cmp < 0) return true; else if (0 < cmp) return false; } break;
+            case long_type:         for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_long(n), rhs.get_long(n)); if (cmp < 0) return true; else if (0 < cmp) return false; } break;
+            case ulong_type:        for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_ulong(n), rhs.get_ulong(n)); if (cmp < 0) return true; else if (0 < cmp) return false; } break;
+            case longlong_type:     for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_longlong(n), rhs.get_longlong(n)); if (cmp < 0) return true; else if (0 < cmp) return false; } break;
+            case ulonglong_type:    for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_ulonglong(n), rhs.get_ulonglong(n)); if (cmp < 0) return true; else if (0 < cmp) return false; } break;
+            case float_type:        for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_float(n), rhs.get_float(n)); if (cmp < 0) return true; else if (0 < cmp) return false; } break;
+            case double_type:       for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_double(n), rhs.get_double(n)); if (cmp < 0) return true; else if (0 < cmp) return false; } break;
+            case ldouble_type:      for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_ldouble(n), rhs.get_ldouble(n)); if (cmp < 0) return true; else if (0 < cmp) return false; } break;
+            default:                assert(false);
+        }
+        return lsz <= rsz;
+    }
+    bool operator >(const mvalue& rhs) const
+    {
+        size_type lsz = size();
+        size_type rsz = rhs.size();
+        size_type sz = std::min(lsz, rsz);
+        switch (uac_type(*this, rhs))
+        {
+            case int_type:          for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_int(n), rhs.get_int(n)); if (cmp < 0) return false; else if (0 < cmp) return true; } break;
+            case uint_type:         for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_uint(n), rhs.get_uint(n)); if (cmp < 0) return false; else if (0 < cmp) return true; } break;
+            case long_type:         for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_long(n), rhs.get_long(n)); if (cmp < 0) return false; else if (0 < cmp) return true; } break;
+            case ulong_type:        for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_ulong(n), rhs.get_ulong(n)); if (cmp < 0) return false; else if (0 < cmp) return true; } break;
+            case longlong_type:     for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_longlong(n), rhs.get_longlong(n)); if (cmp < 0) return false; else if (0 < cmp) return true; } break;
+            case ulonglong_type:    for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_ulonglong(n), rhs.get_ulonglong(n)); if (cmp < 0) return false; else if (0 < cmp) return true; } break;
+            case float_type:        for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_float(n), rhs.get_float(n)); if (cmp < 0) return false; else if (0 < cmp) return true; } break;
+            case double_type:       for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_double(n), rhs.get_double(n)); if (cmp < 0) return false; else if (0 < cmp) return true; } break;
+            case ldouble_type:      for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_ldouble(n), rhs.get_ldouble(n)); if (cmp < 0) return false; else if (0 < cmp) return true; } break;
+            default:                assert(false);
+        }
+        return lsz > rsz;
+    }
+    bool operator >=(const mvalue& rhs) const
+    {
+        size_type lsz = size();
+        size_type rsz = rhs.size();
+        size_type sz = std::min(lsz, rsz);
+        switch (uac_type(*this, rhs))
+        {
+            case int_type:          for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_int(n), rhs.get_int(n)); if (cmp < 0) return false; else if (0 < cmp) return true; } break;
+            case uint_type:         for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_uint(n), rhs.get_uint(n)); if (cmp < 0) return false; else if (0 < cmp) return true; } break;
+            case long_type:         for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_long(n), rhs.get_long(n)); if (cmp < 0) return false; else if (0 < cmp) return true; } break;
+            case ulong_type:        for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_ulong(n), rhs.get_ulong(n)); if (cmp < 0) return false; else if (0 < cmp) return true; } break;
+            case longlong_type:     for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_longlong(n), rhs.get_longlong(n)); if (cmp < 0) return false; else if (0 < cmp) return true; } break;
+            case ulonglong_type:    for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_ulonglong(n), rhs.get_ulonglong(n)); if (cmp < 0) return false; else if (0 < cmp) return true; } break;
+            case float_type:        for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_float(n), rhs.get_float(n)); if (cmp < 0) return false; else if (0 < cmp) return true; } break;
+            case double_type:       for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_double(n), rhs.get_double(n)); if (cmp < 0) return false; else if (0 < cmp) return true; } break;
+            case ldouble_type:      for (size_type n = 0; n != sz; ++n) { int cmp = tcmp(get_ldouble(n), rhs.get_ldouble(n)); if (cmp < 0) return false; else if (0 < cmp) return true; } break;
+            default:                assert(false);
+        }
+        return lsz >= rsz;
+    }
+#endif
+
+
+    // These comparison operators don't work as I thought they would (bad use of lexicographical_compare)
+    bool operator ==(const mvalue& rhs) const
+    {
+        switch (uac_type(*this, rhs))
+        {
+            case int_type:          return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::equal_to<int>());
+            case uint_type:         return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::equal_to<unsigned int>());
+            case long_type:         return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::equal_to<long>());
+            case ulong_type:        return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::equal_to<unsigned long>());
+            case longlong_type:     return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::equal_to<long long>());
+            case ulonglong_type:    return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::equal_to<unsigned long>());
+            case float_type:        return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::equal_to<float>());
+            case double_type:       return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::equal_to<double>());
+            case ldouble_type:      return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::equal_to<long double>());
+            default:                assert(false); return false;
+        }
+    }
+
+    bool operator !=(const mvalue& rhs) const
+    {
+        switch (uac_type(*this, rhs))
+        {
+            case int_type:          return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::not_equal_to<int>());
+            case uint_type:         return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::not_equal_to<unsigned int>());
+            case long_type:         return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::not_equal_to<long>());
+            case ulong_type:        return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::not_equal_to<unsigned long>());
+            case longlong_type:     return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::not_equal_to<long long>());
+            case ulonglong_type:    return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::not_equal_to<unsigned long>());
+            case float_type:        return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::not_equal_to<float>());
+            case double_type:       return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::not_equal_to<double>());
+            case ldouble_type:      return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::not_equal_to<long double>());
+            default:                assert(false); return false;
+        }
+    }
+    bool operator <(const mvalue& rhs) const
+    {
+        switch (uac_type(*this, rhs))
+        {
+            case int_type:          return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::less<int>());
+            case uint_type:         return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::less<unsigned int>());
+            case long_type:         return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::less<long>());
+            case ulong_type:        return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::less<unsigned long>());
+            case longlong_type:     return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::less<long long>());
+            case ulonglong_type:    return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::less<unsigned long>());
+            case float_type:        return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::less<float>());
+            case double_type:       return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::less<double>());
+            case ldouble_type:      return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::less<long double>());
+            default:                assert(false); return false;
+        }
+    }
+    bool operator <=(const mvalue& rhs) const
+    {
+        switch (uac_type(*this, rhs))
+        {
+            case int_type:          return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::less_equal<int>());
+            case uint_type:         return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::less_equal<unsigned int>());
+            case long_type:         return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::less_equal<long>());
+            case ulong_type:        return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::less_equal<unsigned long>());
+            case longlong_type:     return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::less_equal<long long>());
+            case ulonglong_type:    return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::less_equal<unsigned long>());
+            case float_type:        return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::less_equal<float>());
+            case double_type:       return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::less_equal<double>());
+            case ldouble_type:      return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::less_equal<long double>());
+            default:                assert(false); return false;
+        }
+    }
+    bool operator >(const mvalue& rhs) const
+    {
+        switch (uac_type(*this, rhs))
+        {
+            case int_type:          return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::greater<int>());
+            case uint_type:         return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::greater<unsigned int>());
+            case long_type:         return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::greater<long>());
+            case ulong_type:        return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::greater<unsigned long>());
+            case longlong_type:     return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::greater<long long>());
+            case ulonglong_type:    return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::greater<unsigned long>());
+            case float_type:        return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::greater<float>());
+            case double_type:       return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::greater<double>());
+            case ldouble_type:      return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::greater<long double>());
+            default:                assert(false); return false;
+        }
+    }
+    bool operator >=(const mvalue& rhs) const
+    {
+        switch (uac_type(*this, rhs))
+        {
+            case int_type:          return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::greater_equal<int>());
+            case uint_type:         return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::greater_equal<unsigned int>());
+            case long_type:         return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::greater_equal<long>());
+            case ulong_type:        return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::greater_equal<unsigned long>());
+            case longlong_type:     return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::greater_equal<long long>());
+            case ulonglong_type:    return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::greater_equal<unsigned long>());
+            case float_type:        return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::greater_equal<float>());
+            case double_type:       return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::greater_equal<double>());
+            case ldouble_type:      return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), std::greater_equal<long double>());
+            default:                assert(false); return false;
+        }
+    }
